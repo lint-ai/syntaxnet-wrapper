@@ -18,7 +18,7 @@ The wrapper has been tester on Ubuntu 14.04 Trusty and 16.04 Xenial.
 (virtualenv)$ git clone https://github.com/short-edition/syntaxnet-wrapper.git
 (virtualenv)$ cd syntaxnet-wrapper
 (virtualenv)/syntaxnet-wrapper$ pip install -r requirements.txt
-(virtualenv)/syntaxnet-wrapper$ vim config.yml
+(virtualenv)/syntaxnet-wrapper$ vim syntaxnet_wrapper/config.yml
 syntaxnet:
   ROOT_DIR: /home/user/workspace/syntactic_parser/tensorflow_models/syntaxnet
   PARSER_EVAL: bazel-bin/syntaxnet/parser_eval
@@ -28,7 +28,7 @@ syntaxnet:
 (virtualenv)/syntaxnet-wrapper$ python -m unittest discover syntaxnet_wrapper
 (virtualenv)/syntaxnet-wrapper$ pip install .
 ```
-You should be able to use the wrapper from now
+You should be able to use the wrapper from now. Instead of creating `config.yml` in the current folder, you can also expose it though the environment variable `SYNTAXNET_WRAPPER_CONFIG` or copying it in `/usr/share/syntaxnet_wrapper_config.yml`
 
 ## How to use this wrapper
 

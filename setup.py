@@ -11,5 +11,6 @@ setup(
     author_email='contact@big-datext.com',
     platforms=["any"],
     keywords='machine-learning wrapper nlp',
+    include_package_data=True,
     packages=find_packages()
 )

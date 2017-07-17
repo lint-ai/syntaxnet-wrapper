@@ -1,2 +1,3 @@
-include config.yml
+include syntaxnet_wrapper/*.pbtxt
+include syntaxnet_wrapper/*.yml
 
