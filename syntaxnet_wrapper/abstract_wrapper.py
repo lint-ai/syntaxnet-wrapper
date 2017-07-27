@@ -61,8 +61,10 @@ class AbstractSyntaxNetWrapper(object):
 
         return [format_token(line) for line in parse.strip().split('\n') if line]
 
-
     def _format_sentence(self, sentence):
+        if sentence is None or len(sentence) == 0:
+            raise ValueError("Input sentence should not be None or size zero")
+
         try:
             return sentence.encode('utf-8')
         except UnicodeError:

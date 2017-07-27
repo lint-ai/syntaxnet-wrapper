@@ -89,7 +89,7 @@ class SyntaxNetWrapper(AbstractSyntaxNetWrapper):
     def tag_sentence(self, sentence):
 
         # do morphological analyze
-        morpho_form = self._morpher_process.parse(sentence)
+        morpho_form = self._morpher_process.parse(self._format_sentence(sentence) + "\n")
 
         # do pos tagging
         pos_tags = self._tagger_process.parse(morpho_form)
@@ -112,7 +112,7 @@ class SyntaxNetWrapper(AbstractSyntaxNetWrapper):
 
     def parse_sentence(self, sentence):
         # do morphological analyze
-        morpho_form = self._morpher_process.parse(sentence)
+        morpho_form = self._morpher_process.parse(self._format_sentence(sentence) + "\n")
 
         # do pos tagging
         pos_tags = self._tagger_process.parse(morpho_form)
