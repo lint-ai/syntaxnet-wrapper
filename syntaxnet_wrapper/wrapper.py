@@ -3,7 +3,7 @@
 import random, string
 
 from syntaxnet_wrapper.abstract_wrapper import AbstractSyntaxNetWrapper
-from syntaxnet_wrapper.parser_eval import SyntaxNetConfig, SyntaxNetProcess, configure_stdout
+from syntaxnet_wrapper.parser_eval import SyntaxNetConfig, SyntaxNetProcess
 from syntaxnet_wrapper import *
 
 
@@ -16,9 +16,6 @@ class SyntaxNetWrapper(AbstractSyntaxNetWrapper):
     def __init__(self, language='English'):
 
         super(SyntaxNetWrapper, self).__init__(language)
-
-        # init stdout file
-        configure_stdout('/tmp/stdout.tmp')
 
         # Initiate Morpher
         morpher_config = SyntaxNetConfig(

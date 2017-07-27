@@ -1,5 +1,4 @@
 #
-#
 # Heavily inspired from https://github.com/IINemo/docker-syntaxnet_rus://github.com/IINemo/docker-syntaxnet_rus
 # itself inspired from https://github.com/tensorflow/models/blob/master/syntaxnet/syntaxnet/parser_eval.py
 # just modified to be able to call wrapper several time for the same process
@@ -9,7 +8,7 @@
 
 import os, sys
 import os.path as path
-
+import contextlib
 
 ################################################################################
 # Make importable module from syntaxnet path
@@ -38,7 +37,7 @@ shutil.copyfile(path.join(path.dirname(__file__), './context.pbtxt'), path.join(
 
 ################################################################################
 
-import tempfile 
+import tempfile
 
 import tensorflow as tf
 
@@ -67,7 +66,7 @@ def RewriteContext(task_context, resource_dir):
 
 
 class SyntaxNetConfig:
-    
+
     def __init__(self,
         task_context='',               # Path to a task context with inputs and parameters for feature extractors.
         resource_dir='',               # Optional base directory for task context resources.
@@ -143,28 +142,31 @@ class SyntaxNetProcess:
                                                                     arg_prefix=self._pg.arg_prefix,
                                                                     beam_size=self._pg.beam_size,
                                                                     max_steps=self._pg.max_steps)
-                self._parser.AddEvaluation(self.task_context, self._pg.batch_size, corpus_name=self._pg.input_, evaluation_max_steps=self._pg.max_steps)
-                self._parser.AddSaver(self._pg.slim_model)
-                self._sess.run(self._parser.inits.values())
-                self._parser.saver.restore(self._sess, self._pg.model_path)
+            self._parser.AddEvaluation(self.task_context, self._pg.batch_size, corpus_name=self._pg.input_, evaluation_max_steps=self._pg.max_steps)
+            self._parser.AddSaver(self._pg.slim_model)
+            self._sess.run(self._parser.inits.values())
+            self._parser.saver.restore(self._sess, self._pg.model_path)
 
 
     def parse(self, raw_bytes):
-        if os.stat(self._pg.custom_file).st_size > self._pg.max_tmp_size:
-            # Cleaning input file at each new call of parse
-            with open(self._pg.custom_file, 'w') as f:
-                pass
+        with stdout_redirected(self.stdout_file_path):
+            if os.stat(self._pg.custom_file).st_size > self._pg.max_tmp_size:
+                # Cleaning input file at each new call of parse
+                with open(self._pg.custom_file, 'w') as f:
+                    pass
 
-            # Reset offset inside tensorflow input file class
+                # Reset offset inside tensorflow input file class
+                self._parse_impl()
+
+            with open(self._pg.custom_file, 'a') as f:
+                f.write(raw_bytes)
+                f.flush()
+
             self._parse_impl()
 
-        with open(self._pg.custom_file, 'a') as f:
-            f.write(raw_bytes)
-            f.flush()
+            result = self._read_all_stream()
 
-        self._parse_impl()
-
-        return self._read_all_stream()
+        return result
 
 
     def _parse_impl(self):
@@ -198,9 +200,15 @@ class SyntaxNetProcess:
         return result[:-1]
 
 
-def configure_stdout(stdout_file_path):
-    strm = open(stdout_file_path, 'w') # bypassing linux 64 kb pipe limit
+@contextlib.contextmanager
+def stdout_redirected(dest_filename):
+    oldstdchannel = os.dup(sys.stdout.fileno())
+    strm = open(dest_filename, 'w')  # bypassing linux 64 kb pipe limit
     os.dup2(strm.fileno(), sys.stdout.fileno())
 
-    return strm
+    yield
+
+    os.dup2(oldstdchannel, sys.stdout.fileno())
+    strm.close()
+
 
