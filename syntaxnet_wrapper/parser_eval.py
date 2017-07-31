@@ -118,6 +118,7 @@ class SyntaxNetProcess:
         with open(self._pg.custom_file, 'w') as f:
             pass
         self.fdescr_ = open(self._pg.custom_file, 'r')
+        self.fdescr_.close()
 
         with tf.variable_scope(self._pg.variable_scope):
             feature_sizes, domain_sizes, embedding_dims, num_actions = self._sess.run(
@@ -209,6 +210,7 @@ def stdout_redirected(dest_filename):
     yield
 
     os.dup2(oldstdchannel, sys.stdout.fileno())
+    os.close(oldstdchannel)
     strm.close()
 
 
