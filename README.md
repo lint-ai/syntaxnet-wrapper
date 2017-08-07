@@ -30,6 +30,8 @@ syntaxnet:
 ```
 You should be able to use the wrapper from now. Instead of creating `config.yml` in the current folder, you can also expose it though the environment variable `SYNTAXNET_WRAPPER_CONFIG` or copying it in `/usr/share/syntaxnet_wrapper_config.yml`
 
+You can also use the `Dockerfile` provided that will install SyntaxNet itself and the wrapper
+
 ## How to use this wrapper
 
 **Two mode**
