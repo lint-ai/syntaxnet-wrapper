@@ -1,4 +1,4 @@
-# SyntaxNet Wrapper
+# SyntaxNet Wrapper [![Build Status](https://travis-ci.org/short-edition/syntaxnet-wrapper.svg?branch=master)](https://travis-ci.org/short-edition/syntaxnet-wrapper)
 
 *A lightweight SyntaxNet wrapper*
 
