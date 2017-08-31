@@ -9,4 +9,4 @@ before_install:
   - docker build -t syntaxnet_wrapper_test .
 
 script:
-  - docker run syntaxnet_wrapper_test /bin/bash -c "python -m unittest discover /root/syntaxnet_wrapper/"
+  - docker run syntaxnet_wrapper_test /bin/bash -c "cd /root/syntaxnet-wrapper && python -m unittest discover ."
