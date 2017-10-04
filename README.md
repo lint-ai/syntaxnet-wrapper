@@ -10,7 +10,7 @@ Disclaimer : Has been inspired from another [wrapper](https://github.com/JoshDat
 
 ## Installation
 
-We assume here that you have SyntaxNet installed and working properly on your workstation. If not, please refer to [SyntaxNet official page](https://github.com/tensorflow/models/tree/master/syntaxnet)
+We assume here that you have SyntaxNet installed and working properly on your workstation. If not, please refer to [SyntaxNet official page](https://github.com/tensorflow/models/tree/master/research/syntaxnet)
 
 The wrapper has been tester on Ubuntu 14.04 Trusty and 16.04 Xenial.
 
