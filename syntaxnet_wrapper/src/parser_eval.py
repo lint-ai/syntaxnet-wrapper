@@ -33,7 +33,7 @@ sys.path += python_path_entries
 # Copy custom context.pbtxt to replace the default one from syntaxnet repo
 # The custom context.pbtxt use custom file instead of stdin and stdout
 import shutil
-shutil.copyfile(path.join(path.dirname(__file__), './context.pbtxt'), path.join(root_dir, context_path))
+shutil.copyfile(path.join(path.dirname(__file__), '../context.pbtxt'), path.join(root_dir, context_path))
 
 ################################################################################
 
