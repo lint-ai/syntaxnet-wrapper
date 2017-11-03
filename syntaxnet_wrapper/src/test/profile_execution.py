@@ -1,7 +1,8 @@
-from syntaxnet_wrapper.wrapper import SyntaxNetWrapper
-
 from time import time
+
 from prettytable import PrettyTable
+
+from syntaxnet_wrapper.src.wrapper import SyntaxNetWrapper
 
 
 def profile_exec(niter, action, keep_wrapper):

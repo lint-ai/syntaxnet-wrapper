@@ -1,13 +1,13 @@
 # coding: utf-8
 
 # import common libs
-import requests
 import zipfile
+import requests
 
-from syntaxnet_wrapper import *
-from syntaxnet_wrapper.graph.vertice import Vertice
-from syntaxnet_wrapper.graph.edge import Edge
-from syntaxnet_wrapper.graph.graph import Graph
+from syntaxnet_wrapper.src.graph.edge import Edge
+from syntaxnet_wrapper.src.graph.graph import Graph
+from syntaxnet_wrapper.src.graph.vertice import Vertice
+from syntaxnet_wrapper.src import *
 
 
 class AbstractSyntaxNetWrapper(object):

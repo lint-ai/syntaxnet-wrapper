@@ -1,7 +1,9 @@
 # coding=utf-8
 
 from unittest2 import TestCase
-from syntaxnet_wrapper.utils.pos_aggregation import pos_aggregate
+
+from syntaxnet_wrapper.src.utils.pos_aggregation import pos_aggregate
+
 
 class TestPostAggregation(TestCase):
 

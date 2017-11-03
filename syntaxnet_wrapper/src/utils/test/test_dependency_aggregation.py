@@ -1,8 +1,9 @@
 # coding=utf-8
 
+from syntaxnet_wrapper.src.utils.dependency_aggregation import dependency_aggregate
 from unittest2 import TestCase
-from syntaxnet_wrapper.utils.dependency_aggregation import dependency_aggregate
-from syntaxnet_wrapper.abstract_wrapper import AbstractSyntaxNetWrapper
+
+from syntaxnet_wrapper.src.abstract_wrapper import AbstractSyntaxNetWrapper
 
 
 class TestDependencyAggregation(TestCase):

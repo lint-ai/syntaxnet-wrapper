@@ -1,6 +1,3 @@
-from syntaxnet_wrapper.graph.vertice import Vertice
-from syntaxnet_wrapper.graph.edge import Edge
-
 class Graph(object):
 
     def __init__(self):

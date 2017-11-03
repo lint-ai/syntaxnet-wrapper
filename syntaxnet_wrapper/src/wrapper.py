@@ -1,10 +1,11 @@
 # coding: utf8
 
-import random, string
+import random
+import string
 
-from syntaxnet_wrapper.abstract_wrapper import AbstractSyntaxNetWrapper
-from syntaxnet_wrapper.parser_eval import SyntaxNetConfig, SyntaxNetProcess
 from syntaxnet_wrapper import *
+from syntaxnet_wrapper.src.abstract_wrapper import AbstractSyntaxNetWrapper
+from syntaxnet_wrapper.src.parser_eval import SyntaxNetConfig, SyntaxNetProcess
 
 
 class SyntaxNetWrapper(AbstractSyntaxNetWrapper):

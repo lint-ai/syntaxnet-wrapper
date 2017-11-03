@@ -2,7 +2,7 @@
 
 from unittest2 import TestCase
 
-from syntaxnet_wrapper.wrapper_subprocess import *
+from syntaxnet_wrapper.src.wrapper_subprocess import *
 
 
 class TestWrapperSubprocess(TestCase):

@@ -1,8 +1,8 @@
+from syntaxnet_wrapper.src.graph.edge import Edge
+from syntaxnet_wrapper.src.graph.graph import Graph
 from unittest2 import TestCase
 
-from syntaxnet_wrapper.graph.graph import Graph
-from syntaxnet_wrapper.graph.vertice import Vertice
-from syntaxnet_wrapper.graph.edge import Edge
+from syntaxnet_wrapper.src.graph.vertice import Vertice
 
 class TestGraph(TestCase):
 

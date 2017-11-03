@@ -2,7 +2,7 @@
 
 from unittest2 import TestCase
 
-from syntaxnet_wrapper.abstract_wrapper import *
+from syntaxnet_wrapper.src.abstract_wrapper import *
 
 
 class TestAbstractWrapper(TestCase):

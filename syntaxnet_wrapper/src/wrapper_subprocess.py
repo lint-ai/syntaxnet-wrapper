@@ -2,8 +2,8 @@
 
 import subprocess
 
-from syntaxnet_wrapper.abstract_wrapper import AbstractSyntaxNetWrapper
 from syntaxnet_wrapper import *
+from syntaxnet_wrapper.src.abstract_wrapper import AbstractSyntaxNetWrapper
 
 
 def open_parser_eval(args):

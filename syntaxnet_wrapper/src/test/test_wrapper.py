@@ -2,11 +2,10 @@
 
 from unittest2 import TestCase
 
-from syntaxnet_wrapper.wrapper import *
+from syntaxnet_wrapper.src.wrapper import *
 
 
 class TestWrapper(TestCase):
-
 
     def test_morpho_sentence(self):
         with self.assertRaises(ValueError):

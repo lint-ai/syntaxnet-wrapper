@@ -1,2 +1,0 @@
-from syntaxnet_wrapper.utils.pos_aggregation import pos_aggregate
-from syntaxnet_wrapper.utils.dependency_aggregation import dependency_aggregate
