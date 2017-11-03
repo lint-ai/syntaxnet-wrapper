@@ -12,7 +12,7 @@ import contextlib
 
 ################################################################################
 # Make importable module from syntaxnet path
-from syntaxnet_wrapper import root_dir, context_path
+from syntaxnet_wrapper.src import root_dir, context_path
 
 
 def CreatePythonPathEntries(python_imports, module_space):

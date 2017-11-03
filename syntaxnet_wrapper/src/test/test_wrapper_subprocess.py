@@ -18,9 +18,9 @@ class TestWrapperSubprocess(TestCase):
                 "--hidden_layer_sizes=64",
                 "--arg_prefix=brain_morpher",
                 "--graph_builder=structured",
-                "--task_context=%s" %context_path,
-                "--resource_dir=%s" %wrapper._model_file,
-                "--model_path=%s/morpher-params" %wrapper._model_file,
+                "--task_context=%s" % context_path,
+                "--resource_dir=%s" % wrapper._model_file,
+                "--model_path=%s/morpher-params" % wrapper._model_file,
                 "--slim_model",
                 "--batch_size=1024",
                 "--alsologtostderr"

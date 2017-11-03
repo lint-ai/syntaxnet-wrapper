@@ -3,7 +3,7 @@
 import random
 import string
 
-from syntaxnet_wrapper import *
+from syntaxnet_wrapper.src import *
 from syntaxnet_wrapper.src.abstract_wrapper import AbstractSyntaxNetWrapper
 from syntaxnet_wrapper.src.parser_eval import SyntaxNetConfig, SyntaxNetProcess
 

@@ -89,3 +89,6 @@ ENV/
 .ropeproject
 
 syntaxnet_wrapper/config.yml
+
+# pycharm hidden files
+.idea
