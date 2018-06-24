@@ -4,8 +4,8 @@ from unittest2 import TestCase
 
 from syntaxnet_wrapper.src.graph.vertice import Vertice
 
-class TestGraph(TestCase):
 
+class TestGraph(TestCase):
     def test_create_graph(self):
         g1 = Graph()
         self.assertEqual([], g1._vertices)
@@ -47,7 +47,7 @@ class TestGraph(TestCase):
 
         with self.assertRaises(ValueError):
             v3 = Vertice('v3')
-            e2 = Edge('e2', v1, v3) # v2 is instanciated but not inserted in graph
+            e2 = Edge('e2', v1, v3)  # v2 is instanciated but not inserted in graph
             g1.add_edge(e2)
 
     def test_get_relate_edges(self):
@@ -78,8 +78,31 @@ class TestGraph(TestCase):
         e1 = Edge('e1', v1, v2)
         g1.add_edge(e1)
 
-        result = [{'edges': [{'vertice_b': 'v2', 'index': 'e1', 'vertice_a': 'v1', 'is_directed': True, 'attributes': None}], 'vertice': {'index': 'v1', 'attributes': None}}, {'edges': [{'vertice_b': 'v2', 'index': 'e1', 'vertice_a': 'v1', 'is_directed': True, 'attributes': None}], 'vertice': {'index': 'v2', 'attributes': None}}]
+        result = [
+            {
+                'edges': [
+                    {
+                        'vertice_b': 'v2',
+                        'index': 'e1',
+                        'vertice_a': 'v1',
+                        'is_directed': True,
+                        'attributes': None,
+                    }
+                ],
+                'vertice': {'index': 'v1', 'attributes': None},
+            },
+            {
+                'edges': [
+                    {
+                        'vertice_b': 'v2',
+                        'index': 'e1',
+                        'vertice_a': 'v1',
+                        'is_directed': True,
+                        'attributes': None,
+                    }
+                ],
+                'vertice': {'index': 'v2', 'attributes': None},
+            },
+        ]
 
         self.assertEqual(result, list(g1.serialize()))
-
-

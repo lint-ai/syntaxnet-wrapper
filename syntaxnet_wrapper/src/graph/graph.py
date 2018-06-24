@@ -1,5 +1,4 @@
 class Graph(object):
-
     def __init__(self):
         self._vertices = []
         self._edges = []
@@ -11,7 +10,7 @@ class Graph(object):
 
     def add_vertice(self, vertice):
         if self.get_vertice(vertice.index) is not None:
-            raise ValueError('The vertice %s already exist in graph' %vertice.index)
+            raise ValueError('The vertice %s already exist in graph' % vertice.index)
 
         self._vertices.append(vertice)
 
@@ -21,8 +20,13 @@ class Graph(object):
                 return edge
 
     def add_edge(self, edge):
-        if self.get_vertice(edge.vertice_a.index) is None or self.get_vertice(edge.vertice_b.index) is None:
-            raise ValueError('A vertice is missing in the graph, please ensure you inserted them all')
+        if (
+            self.get_vertice(edge.vertice_a.index) is None
+            or self.get_vertice(edge.vertice_b.index) is None
+        ):
+            raise ValueError(
+                'A vertice is missing in the graph, please ensure you inserted them all'
+            )
 
         if self.get_edge(edge.index) is not None:
             raise ValueError('This edge already exist in graph')
@@ -31,7 +35,10 @@ class Graph(object):
 
     def get_related_edges(self, vertice_index):
         for edge in self._edges:
-            if edge.vertice_a.index == vertice_index or edge.vertice_b.index == vertice_index:
+            if (
+                edge.vertice_a.index == vertice_index
+                or edge.vertice_b.index == vertice_index
+            ):
                 yield edge
 
     def serialize(self):
@@ -40,6 +47,9 @@ class Graph(object):
         Edges will be returned several times
         """
         for vertice in self._vertices:
-            yield {'vertice': vertice.__dict__, 
-                   'edges': [edge.serialize() for edge in self.get_related_edges(vertice.index)]
-                  }
+            yield {
+                'vertice': vertice.__dict__,
+                'edges': [
+                    edge.serialize() for edge in self.get_related_edges(vertice.index)
+                ],
+            }

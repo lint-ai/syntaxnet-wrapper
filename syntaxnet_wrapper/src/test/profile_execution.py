@@ -56,9 +56,8 @@ test_cases = [
 
 for test_case in test_cases:
     exec_time = profile_exec(**test_case)
-    x.add_row([test_case['action'],
-               test_case['niter'],
-               test_case['keep_wrapper'],
-               exec_time])
+    x.add_row(
+        [test_case['action'], test_case['niter'], test_case['keep_wrapper'], exec_time]
+    )
 with open('output_profiling.txt', 'wb') as file_:
     file_.write(x.get_string())

@@ -30,7 +30,10 @@ class SyntaxNetWrapper(AbstractSyntaxNetWrapper):
             slim_model=True,
             custom_file='/tmp/morpher.tmp',  # Need to be hardcoded, dependant with custom context.pbtxt
             # add random string to variable scope to have unique one. Allow instanciate several SyntaxNetWrapper
-            variable_scope='morpher' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)),
+            variable_scope='morpher'
+            + ''.join(
+                random.choice(string.ascii_uppercase + string.digits) for _ in range(6)
+            ),
             graph_builder_='structured',
         )
         self._morpher_process = SyntaxNetProcess(morpher_config)
@@ -47,7 +50,10 @@ class SyntaxNetWrapper(AbstractSyntaxNetWrapper):
             slim_model=True,
             custom_file='/tmp/tagger.tmp',  # Need to be hardcoded, dependant with custom context.pbtxt
             # add random string to variable scope to have unique one. Allow instanciate several SyntaxNetWrapper
-            variable_scope='tagger' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)),
+            variable_scope='tagger'
+            + ''.join(
+                random.choice(string.ascii_uppercase + string.digits) for _ in range(6)
+            ),
             graph_builder_='structured',
         )
         self._tagger_process = SyntaxNetProcess(tagger_config)
@@ -64,44 +70,49 @@ class SyntaxNetWrapper(AbstractSyntaxNetWrapper):
             slim_model=True,
             custom_file='/tmp/parser.tmp',  # Need to be hardcoded, dependant with custom context.pbtxt
             # add random string to variable scope to have unique one. Allow instanciate several SyntaxNetWrapper
-            variable_scope='parser' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6)),
+            variable_scope='parser'
+            + ''.join(
+                random.choice(string.ascii_uppercase + string.digits) for _ in range(6)
+            ),
             graph_builder_='structured',
         )
 
         self._parser_process = SyntaxNetProcess(parser_config)
 
-
     def morpho_sentence(self, sentence):
         result = self._morpher_process.parse(self._format_sentence(sentence) + "\n")
         return result.decode('utf-8')
-
 
     def morpho_sentences(self, sentences):
         if type(sentences) is not list:
             raise ValueError("sentences must be given as a list object")
 
-        joined_sentences = '\n'.join([self._format_sentence(sentence) for sentence in sentences])
+        joined_sentences = '\n'.join(
+            [self._format_sentence(sentence) for sentence in sentences]
+        )
 
         # do morphological analyze
         result = self._morpher_process.parse(joined_sentences + "\n")
         return result.decode('utf-8')
 
-
     def tag_sentence(self, sentence):
 
         # do morphological analyze
-        morpho_form = self._morpher_process.parse(self._format_sentence(sentence) + "\n")
+        morpho_form = self._morpher_process.parse(
+            self._format_sentence(sentence) + "\n"
+        )
 
         # do pos tagging
         pos_tags = self._tagger_process.parse(morpho_form)
         return pos_tags.decode('utf-8')
 
-
     def tag_sentences(self, sentences):
         if type(sentences) is not list:
             raise ValueError("sentences must be given as a list object")
 
-        joined_sentences = '\n'.join([self._format_sentence(sentence) for sentence in sentences])
+        joined_sentences = '\n'.join(
+            [self._format_sentence(sentence) for sentence in sentences]
+        )
 
         # do morphological analyze
         morpho_form = self._morpher_process.parse(joined_sentences + '\n')
@@ -110,10 +121,11 @@ class SyntaxNetWrapper(AbstractSyntaxNetWrapper):
         pos_tags = self._tagger_process.parse(morpho_form)
         return pos_tags.decode('utf-8')
 
-
     def parse_sentence(self, sentence):
         # do morphological analyze
-        morpho_form = self._morpher_process.parse(self._format_sentence(sentence) + "\n")
+        morpho_form = self._morpher_process.parse(
+            self._format_sentence(sentence) + "\n"
+        )
 
         # do pos tagging
         pos_tags = self._tagger_process.parse(morpho_form)
@@ -122,12 +134,13 @@ class SyntaxNetWrapper(AbstractSyntaxNetWrapper):
         syntax_form = self._parser_process.parse(pos_tags)
         return syntax_form.decode('utf-8')
 
-
     def parse_sentences(self, sentences):
         if type(sentences) is not list:
             raise ValueError("sentences must be given as a list object")
 
-        joined_sentences = '\n'.join([self._format_sentence(sentence) for sentence in sentences])
+        joined_sentences = '\n'.join(
+            [self._format_sentence(sentence) for sentence in sentences]
+        )
 
         # do morphological analyze
         morpho_form = self._morpher_process.parse(joined_sentences + "\n")

@@ -16,8 +16,9 @@ from syntaxnet_wrapper.src import root_dir, context_path
 
 
 def CreatePythonPathEntries(python_imports, module_space):
-    parts = python_imports.split(':');
+    parts = python_imports.split(':')
     return [module_space] + ["%s/%s" % (module_space, path) for path in parts]
+
 
 module_space = path.join(root_dir, 'bazel-bin/syntaxnet/parser_eval.runfiles/')
 python_imports = 'protobuf/python'
@@ -33,7 +34,11 @@ sys.path += python_path_entries
 # Copy custom context.pbtxt to replace the default one from syntaxnet repo
 # The custom context.pbtxt use custom file instead of stdin and stdout
 import shutil
-shutil.copyfile(path.join(path.dirname(__file__), '../context.pbtxt'), path.join(root_dir, context_path))
+
+shutil.copyfile(
+    path.join(path.dirname(__file__), '../context.pbtxt'),
+    path.join(root_dir, context_path),
+)
 
 ################################################################################
 
@@ -66,23 +71,23 @@ def RewriteContext(task_context, resource_dir):
 
 
 class SyntaxNetConfig:
-
-    def __init__(self,
-        task_context='',               # Path to a task context with inputs and parameters for feature extractors.
-        resource_dir='',               # Optional base directory for task context resources.
-        model_path='',                 # Path to model parameters.
-        arg_prefix=None,               # Prefix for context parameters.
-        graph_builder_='greedy',       # Which graph builder to use, either greedy or structured.
-        input_='stdin',                # Name of the context input to read data from.
-        hidden_layer_sizes=[200, 200], # Comma separated list of hidden layer sizes.
-        batch_size=32,                 # Number of sentences to process in parallel.
-        beam_size=8,                   # Number of slots for beam parsing.
-        max_steps=1000,                # Max number of steps to take.
-        slim_model=False,              # Whether to expect only averaged variables.
-        custom_file='/tmp/tmp.file',   # File to communicate input to SyntaxNet
-        variable_scope=None,           # Scope with the defined parser variable, to set up the context
-        max_tmp_size=262144000,        # Maximum size of tmp input file
-        ):
+    def __init__(
+        self,
+        task_context='',  # Path to a task context with inputs and parameters for feature extractors.
+        resource_dir='',  # Optional base directory for task context resources.
+        model_path='',  # Path to model parameters.
+        arg_prefix=None,  # Prefix for context parameters.
+        graph_builder_='greedy',  # Which graph builder to use, either greedy or structured.
+        input_='stdin',  # Name of the context input to read data from.
+        hidden_layer_sizes=[200, 200],  # Comma separated list of hidden layer sizes.
+        batch_size=32,  # Number of sentences to process in parallel.
+        beam_size=8,  # Number of slots for beam parsing.
+        max_steps=1000,  # Max number of steps to take.
+        slim_model=False,  # Whether to expect only averaged variables.
+        custom_file='/tmp/tmp.file',  # File to communicate input to SyntaxNet
+        variable_scope=None,  # Scope with the defined parser variable, to set up the context
+        max_tmp_size=262144000,  # Maximum size of tmp input file
+    ):
 
         self.task_context = task_context
         self.resource_dir = resource_dir
@@ -99,13 +104,14 @@ class SyntaxNetConfig:
         self.variable_scope = variable_scope
         self.max_tmp_size = max_tmp_size
 
+
 class SyntaxNetProcess:
-
-
     def __init__(self, processconfig):
         self._sess = tf.Session()
         self._pg = processconfig
-        self.stdout_file_path = os.path.join(os.path.dirname(self._pg.custom_file), 'stdout.tmp') # File where syntaxnet output will be written
+        self.stdout_file_path = os.path.join(
+            os.path.dirname(self._pg.custom_file), 'stdout.tmp'
+        )  # File where syntaxnet output will be written
 
         """
         Builds and evaluates a network.
@@ -122,32 +128,42 @@ class SyntaxNetProcess:
 
         with tf.variable_scope(self._pg.variable_scope):
             feature_sizes, domain_sizes, embedding_dims, num_actions = self._sess.run(
-                gen_parser_ops.feature_size(task_context=self.task_context, arg_prefix=self._pg.arg_prefix))
-
+                gen_parser_ops.feature_size(
+                    task_context=self.task_context, arg_prefix=self._pg.arg_prefix
+                )
+            )
 
             if self._pg.graph_builder_ == 'greedy':
-                self._parser = graph_builder.GreedyParser(num_actions,
-                                            feature_sizes,
-                                            domain_sizes,
-                                            embedding_dims,
-                                            self._pg.hidden_layer_sizes,
-                                            gate_gradients=True,
-                                            arg_prefix=self._pg.arg_prefix)
+                self._parser = graph_builder.GreedyParser(
+                    num_actions,
+                    feature_sizes,
+                    domain_sizes,
+                    embedding_dims,
+                    self._pg.hidden_layer_sizes,
+                    gate_gradients=True,
+                    arg_prefix=self._pg.arg_prefix,
+                )
             else:
-                self._parser = structured_graph_builder.StructuredGraphBuilder(num_actions,
-                                                                    feature_sizes,
-                                                                    domain_sizes,
-                                                                    embedding_dims,
-                                                                    self._pg.hidden_layer_sizes,
-                                                                    gate_gradients=True,
-                                                                    arg_prefix=self._pg.arg_prefix,
-                                                                    beam_size=self._pg.beam_size,
-                                                                    max_steps=self._pg.max_steps)
-            self._parser.AddEvaluation(self.task_context, self._pg.batch_size, corpus_name=self._pg.input_, evaluation_max_steps=self._pg.max_steps)
+                self._parser = structured_graph_builder.StructuredGraphBuilder(
+                    num_actions,
+                    feature_sizes,
+                    domain_sizes,
+                    embedding_dims,
+                    self._pg.hidden_layer_sizes,
+                    gate_gradients=True,
+                    arg_prefix=self._pg.arg_prefix,
+                    beam_size=self._pg.beam_size,
+                    max_steps=self._pg.max_steps,
+                )
+            self._parser.AddEvaluation(
+                self.task_context,
+                self._pg.batch_size,
+                corpus_name=self._pg.input_,
+                evaluation_max_steps=self._pg.max_steps,
+            )
             self._parser.AddSaver(self._pg.slim_model)
             self._sess.run(self._parser.inits.values())
             self._parser.saver.restore(self._sess, self._pg.model_path)
-
 
     def parse(self, raw_bytes):
         with stdout_redirected(self.stdout_file_path):
@@ -169,25 +185,27 @@ class SyntaxNetProcess:
 
         return result
 
-
     def _parse_impl(self):
         with tf.variable_scope(self._pg.variable_scope):
-            tf_eval_epochs, tf_eval_metrics, tf_documents = self._sess.run([
-                self._parser.evaluation['epochs'],
-                self._parser.evaluation['eval_metrics'],
-                self._parser.evaluation['documents'],
-            ])
+            tf_eval_epochs, tf_eval_metrics, tf_documents = self._sess.run(
+                [
+                    self._parser.evaluation['epochs'],
+                    self._parser.evaluation['eval_metrics'],
+                    self._parser.evaluation['documents'],
+                ]
+            )
 
             sink_documents = tf.placeholder(tf.string)
-            sink = gen_parser_ops.document_sink(sink_documents,
-                                                task_context=self.task_context,
-                                                corpus_name='stdout-conll')
+            sink = gen_parser_ops.document_sink(
+                sink_documents,
+                task_context=self.task_context,
+                corpus_name='stdout-conll',
+            )
 
             self._sess.run(sink, feed_dict={sink_documents: tf_documents})
 
             sys.stdout.write('\n')
             sys.stdout.flush()
-
 
     def _read_all_stream(self):
         with open(self.stdout_file_path, 'r') as f:
@@ -212,5 +230,3 @@ def stdout_redirected(dest_filename):
     os.dup2(oldstdchannel, sys.stdout.fileno())
     os.close(oldstdchannel)
     strm.close()
-
-
