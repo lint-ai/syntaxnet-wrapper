@@ -32,65 +32,56 @@ class SyntaxNetWrapperSubprocess(AbstractSyntaxNetWrapper):
     """
 
     def _start_processes(self, morpho=False, pos=False, dependency=False):
-        processes = []
+        processes = [None, None, None]
 
         if morpho:
             # Open the morphological analyzer
-            processes.append(
-                open_parser_eval(
-                    [
-                        "--input=stdin",
-                        "--output=stdout-conll",
-                        "--hidden_layer_sizes=64",
-                        "--arg_prefix=brain_morpher",
-                        "--graph_builder=structured",
-                        "--task_context=%s" % context_path,
-                        "--resource_dir=%s" % self._model_file,
-                        "--model_path=%s/morpher-params" % self._model_file,
-                        "--slim_model",
-                        "--batch_size=1024",
-                        "--alsologtostderr",
-                    ]
-                )
+            processes[0] = open_parser_eval(
+                [
+                    "--input=stdin",
+                    "--output=stdout-conll",
+                    "--hidden_layer_sizes=64",
+                    "--arg_prefix=brain_morpher",
+                    "--graph_builder=structured",
+                    "--task_context=%s" % context_path,
+                    "--resource_dir=%s" % self._model_file,
+                    "--model_path=%s/morpher-params" % self._model_file,
+                ]
             )
 
         if pos:
             # Open the part of speech tagger
-            processes.append(
-                open_parser_eval(
-                    [
-                        "--input=stdin-conll",
-                        "--output=stdout-conll",
-                        "--hidden_layer=64",
-                        "--arg_prefix=brain_tagger",
-                        "--graph_builder=structured",
-                        "--task_context=%s" % context_path,
-                        "--resource_dir=%s" % self._model_file,
-                        "--model_path=%s/tagger-params" % self._model_file,
-                        "--slim_model",
-                        "--batch_size=1024",
-                        "--alsologtostderr",
-                    ]
-                )
+            processes[1] = open_parser_eval(
+                [
+                    "--input=stdin-conll",
+                    "--output=stdout-conll",
+                    "--hidden_layer=64",
+                    "--arg_prefix=brain_tagger",
+                    "--graph_builder=structured",
+                    "--task_context=%s" % context_path,
+                    "--resource_dir=%s" % self._model_file,
+                    "--model_path=%s/tagger-params" % self._model_file,
+                    "--slim_model",
+                    "--batch_size=1024",
+                    "--alsologtostderr",
+                ]
             )
         if dependency:
             # Open the syntactic dependency parser.
-            processes.append(
-                open_parser_eval(
-                    [
-                        "--input=stdin-conll",
-                        "--output=stdout-conll",
-                        "--hidden_layer_sizes=512,512",
-                        "--arg_prefix=brain_parser",
-                        "--graph_builder=structured",
-                        "--task_context=%s" % context_path,
-                        "--resource_dir=%s" % self._model_file,
-                        "--model_path=%s/parser-params" % self._model_file,
-                        "--slim_model",
-                        "--batch_size=1024",
-                        "--alsologtostderr",
-                    ]
-                )
+            processes[2] = open_parser_eval(
+                [
+                    "--input=stdin-conll",
+                    "--output=stdout-conll",
+                    "--hidden_layer_sizes=512,512",
+                    "--arg_prefix=brain_parser",
+                    "--graph_builder=structured",
+                    "--task_context=%s" % context_path,
+                    "--resource_dir=%s" % self._model_file,
+                    "--model_path=%s/parser-params" % self._model_file,
+                    "--slim_model",
+                    "--batch_size=1024",
+                    "--alsologtostderr",
+                ]
             )
 
         return processes
@@ -113,7 +104,7 @@ class SyntaxNetWrapperSubprocess(AbstractSyntaxNetWrapper):
         return send_input(morpho_analyzer, joined_sentences + "\n").decode('utf-8')
 
     def tag_sentence(self, sentence):
-        morpho_analyzer, pos_tagger = self._start_processes(morpho=True, pos=True)
+        morpho_analyzer, pos_tagger, _ = self._start_processes(morpho=True, pos=True)
 
         # do morphological analyze
         morpho_form = send_input(
@@ -127,7 +118,7 @@ class SyntaxNetWrapperSubprocess(AbstractSyntaxNetWrapper):
         if type(sentences) is not list:
             raise ValueError("sentences must be given as a list object")
 
-        morpho_analyzer, pos_tagger = self._start_processes(morpho=True, pos=True)
+        morpho_analyzer, pos_tagger, _ = self._start_processes(morpho=True, pos=True)
 
         joined_sentences = "\n".join(
             [self._format_sentence(sentence) for sentence in sentences]
