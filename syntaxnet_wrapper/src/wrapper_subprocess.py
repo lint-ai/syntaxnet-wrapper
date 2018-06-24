@@ -17,9 +17,12 @@ def open_parser_eval(args):
     )
 
 
-def send_input(process, input):
-    # communicate attend la fin du processus, une fois cette fonction appelé le processus est donc terminé.
-    stdout, stderr = process.communicate(input)
+def send_input(process, to_input):
+    """
+    Communicate attend la fin du processus, une fois cette fonction appelé le
+    processus est donc terminé.  (Nota bene: jette STDERR.)
+    """
+    stdout, stderr = process.communicate(to_input)
     return stdout
 
 
@@ -27,8 +30,8 @@ class SyntaxNetWrapperSubprocess(AbstractSyntaxNetWrapper):
     """
     Wrapper allow SyntaxNet use with subprocess calling. Similar to the "demo.sh" call
     Launch tree processes needed to the parsing for each analyse
-    If you have several sentences to process, you might prefer to parse them all in one call with convinient function instead 
-    of several heavy calls
+    If you have several sentences to process, you might prefer to parse them all
+    in one call with convinient function instead of several heavy calls
     """
 
     def _start_processes(self, morpho=False, pos=False, dependency=False):
