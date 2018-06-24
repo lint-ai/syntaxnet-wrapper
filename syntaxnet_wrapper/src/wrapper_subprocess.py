@@ -115,7 +115,7 @@ class SyntaxNetWrapperSubprocess(AbstractSyntaxNetWrapper):
         return send_input(pos_tagger, morpho_form).decode('utf-8')
 
     def tag_sentences(self, sentences):
-        if type(sentences) is not list:
+        if not isinstance(sentences, list):
             raise ValueError("sentences must be given as a list object")
 
         morpho_analyzer, pos_tagger, _ = self._start_processes(morpho=True, pos=True)
@@ -147,7 +147,7 @@ class SyntaxNetWrapperSubprocess(AbstractSyntaxNetWrapper):
         return send_input(dependency_parser, pos_tags).decode('utf-8')
 
     def parse_sentences(self, sentences):
-        if type(sentences) is not list:
+        if not isinstance(sentences, list):
             raise ValueError("sentences must be given as a list object")
 
         morpho_analyzer, pos_tagger, dependency_parser = self._start_processes(
