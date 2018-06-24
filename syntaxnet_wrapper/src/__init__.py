@@ -1,6 +1,6 @@
-import yaml
-import os.path as path
 import os
+import os.path as path
+import yaml
 
 # Load config file and paths
 if os.environ.get('SYNTAXNET_WRAPPER_CONFIG') is not None:
